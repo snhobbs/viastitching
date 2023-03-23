@@ -89,6 +89,39 @@ class ViaObject:
         self.PosY = pos_y
 
 
+class ViaStitchSettings:
+    """
+    Contains all settings for the run, can be passed around as configuration tables
+    """
+    def __init__(self):
+        # Size of the via (diameter of copper)
+        self._size_mm = 0.8 # mm
+        # Size of the drill (diameter)
+        self._drill_mm = 0.4 # mm
+        self._pattern = "grid"
+        self._step_mm = 2.54
+        # Isolation between via and other elements
+        # ie: radius from the border of the via
+        self._clearance_mm = 0.2
+        self._netname = "GND"
+        self._layer = "F.Cu"
+        self._only_selected_area = False
+        self._delete_vias = False
+        self._netname = "GND"
+        self._random = False
+        self._star = False
+
+        self.parent_area = None
+        self.pcb_group = None
+        self.target_net = None
+
+
+class FileSettings:
+    def __init__(self, filename=None):
+        self._filename = filename
+        self.tmp_dir = None
+
+
 class FillArea:
 
     """
@@ -105,7 +138,30 @@ class FillArea:
     REASON_DRAWING = 6
     REASON_STEP = 7
 
-    def __init__(self, filename=None):
+    @property
+    def size_mm(self):
+        return self.settings.size_mm
+
+    @size_mm.setter:
+        def size_mm(self, value):
+            self.settings._size_mm = value
+        self._drill_mm = 0.4 # mm
+        self._pattern = "grid"
+        self._step_mm = 2.54
+        self._clearance_mm = 0.2
+        self._netname = "GND"
+        self._layer = "F.Cu"
+        self._only_selected_area = False
+        self._delete_vias = False
+        self._netname = "GND"
+        self._random = False
+        self._star = False
+
+    def __init__(self, filename=None, viasettings=None):
+        self.settings = viasettings
+        if viasettings is None:
+            self.settings = ViaStitchSettings()
+
         self.filename = None
         self.clearance = 0
         # Net name to use
